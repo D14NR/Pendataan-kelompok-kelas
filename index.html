@@ -4,7 +4,7 @@
     <title>Pendataan Kelompok Kelas</title>
     <meta charset="UTF-8">
     
-    <!-- Favicon untuk icon kelompok kelas -->
+    <!-- Favicon untuk icon education -->
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" type="image/x-icon">
     
     <!-- Viewport untuk mobile -->
@@ -31,7 +31,6 @@
             overflow: hidden;
             position: fixed; /* Penting untuk mobile */
             touch-action: manipulation; /* Mencegah zoom dengan double-tap */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         iframe {
@@ -45,277 +44,64 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        /* Indikator loading profesional untuk mobile */
+        /* Indikator loading untuk mobile */
         .loading {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #333;
             z-index: 999;
-            transition: opacity 0.5s ease;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
-        /* Logo kelompok kelas */
-        .logo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-        
-        .logo-circle {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.1);
+        /* Animasi loading */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #007bff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
         }
         
-        .logo-icon {
-            font-size: 36px;
-            color: white;
-        }
-        
-        .app-title {
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .app-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 16px;
-            text-align: center;
-            font-weight: 400;
-        }
-        
-        /* Container untuk animasi loading profesional */
-        .loader-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        /* Professional loading animation - modern dots */
-        .dot-loader {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 30px 0;
-        }
-        
-        .dot {
-            width: 16px;
-            height: 16px;
-            margin: 0 6px;
-            background-color: white;
-            border-radius: 50%;
-            animation: dot-pulse 1.5s infinite ease-in-out;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-        }
-        
-        .dot:nth-child(1) {
-            animation-delay: -0.3s;
-        }
-        
-        .dot:nth-child(2) {
-            animation-delay: -0.15s;
-        }
-        
-        @keyframes dot-pulse {
-            0%, 80%, 100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-        }
-        
-        /* Progress bar untuk loading */
-        .progress-container {
-            width: 280px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: white;
-            width: 0%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-        }
-        
-        /* Status loading text */
-        .loading-status {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            margin-top: 20px;
-            text-align: center;
-            font-weight: 500;
-            min-height: 20px;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 480px) {
-            .logo-circle {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .logo-icon {
-                font-size: 32px;
-            }
-            
-            .app-title {
-                font-size: 22px;
-            }
-            
-            .progress-container {
-                width: 250px;
-            }
-            
-            .dot {
-                width: 14px;
-                height: 14px;
-            }
-        }
-        
-        /* Animation untuk fade out */
-        .fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        /* CSS untuk icon kelompok kelas (fallback jika font tidak dimuat) */
-        .logo-icon:before {
-            content: "👥";
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Indikator loading profesional -->
+    <!-- Indikator loading -->
     <div class="loading" id="loading">
-        <div class="logo-container">
-            <div class="logo-circle">
-                <div class="logo-icon"></div>
-            </div>
-            <h1 class="app-title">Pendataan Kelompok Kelas</h1>
-            <p class="app-subtitle">Sistem Pengelolaan Data Kelompok Belajar</p>
-        </div>
-        
-        <div class="loader-container">
-            <div class="dot-loader">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-            
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            
-            <div class="loading-status" id="loadingStatus">
-                Memuat sistem pendataan...
-            </div>
-        </div>
+        <div class="spinner"></div>
+        Memuat konten CBT...
     </div>
     
     <iframe 
         id="contentFrame"
-        src="https://script.google.com/a/~/macros/s/AKfycbxdHHPc0MxVv0f4QXKN9PRdua0cKAYShAo9xoMw59THcamUWjcnkwTcgWwG_DRn2Pc9HA/exec"
+        src="https://script.google.com/macros/s/AKfycbxdHHPc0MxVv0f4QXKN9PRdua0cKAYShAo9xoMw59THcamUWjcnkwTcgWwG_DRn2Pc9HA/exec"
         allowfullscreen
         allow="autoplay; encrypted-media; picture-in-picture"
         loading="eager">
     </iframe>
     
     <script>
-        // Simulasi progres loading untuk UX yang lebih baik
-        let progress = 0;
-        const progressBar = document.getElementById('progressBar');
-        const loadingStatus = document.getElementById('loadingStatus');
-        const loadingElement = document.getElementById('loading');
-        const statusMessages = [
-            "Menyiapkan sistem...",
-            "Memuat modul pendataan...",
-            "Menyiapkan antarmuka...",
-            "Hampir selesai..."
-        ];
-        
-        function updateProgress(percentage, message) {
-            progress = percentage;
-            progressBar.style.width = `${percentage}%`;
-            if (message) {
-                loadingStatus.textContent = message;
-            }
-        }
-        
-        // Animasi progres bertahap
-        let progressInterval = setInterval(() => {
-            if (progress < 90) {
-                // Update progress secara acak namun bertahap
-                const increment = Math.floor(Math.random() * 10) + 5;
-                const newProgress = Math.min(90, progress + increment);
-                
-                // Update pesan status berdasarkan progres
-                let messageIndex = Math.floor(newProgress / 25);
-                if (messageIndex < statusMessages.length) {
-                    updateProgress(newProgress, statusMessages[messageIndex]);
-                } else {
-                    updateProgress(newProgress);
-                }
-            }
-        }, 300);
-        
         // Sembunyikan loading setelah iframe dimuat
         document.getElementById('contentFrame').onload = function() {
-            clearInterval(progressInterval);
-            updateProgress(100, "Sistem siap digunakan!");
-            
-            // Tunggu sebentar sebelum menyembunyikan loading
-            setTimeout(function() {
-                loadingElement.classList.add('fade-out');
-                
-                // Sembunyikan sepenuhnya setelah animasi selesai
-                setTimeout(function() {
-                    loadingElement.style.display = 'none';
-                }, 500);
-            }, 800);
+            document.getElementById('loading').style.display = 'none';
         };
         
-        // Fallback: sembunyikan loading setelah 8 detik jika iframe gagal dimuat
+        // Fallback: sembunyikan loading setelah 5 detik
         setTimeout(function() {
-            clearInterval(progressInterval);
-            updateProgress(100, "Menggunakan versi cached...");
-            
-            setTimeout(function() {
-                loadingElement.classList.add('fade-out');
-                
-                setTimeout(function() {
-                    loadingElement.style.display = 'none';
-                }, 500);
-            }, 1000);
-        }, 8000);
+            document.getElementById('loading').style.display = 'none';
+        }, 5000);
         
         // Fungsi untuk layar penuh masih tersedia jika diperlukan
         function toggleFullscreen() {
@@ -373,7 +159,7 @@
             // Pesan untuk orientasi landscape (opsional)
             window.addEventListener("orientationchange", function() {
                 if (window.orientation === 90 || window.orientation === -90) {
-                    console.log("Mode landscape - cocok untuk tampilan pendataan");
+                    console.log("Mode landscape - cocok untuk tampilan CBT");
                 } else {
                     console.log("Mode portrait");
                 }
@@ -391,9 +177,6 @@
                 toggleFullscreen();
             }
         });
-        
-        // Inisialisasi progress
-        updateProgress(10, "Menginisialisasi aplikasi...");
     </script>
 </body>
 </html>
