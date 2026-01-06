@@ -4,177 +4,505 @@
     <title>Pendataan Kelompok Kelas</title>
     <meta charset="UTF-8">
     
-    <!-- Favicon untuk icon education -->
+    <!-- Favicon -->
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" type="image/x-icon">
     
-    <!-- Viewport untuk mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- Untuk iOS Safari -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Untuk Android -->
-    <meta name="mobile-web-app-capable" content="yes">
     
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* Hapus highlight biru di mobile */
+            -webkit-tap-highlight-color: transparent;
         }
         
         body, html {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            position: fixed; /* Penting untuk mobile */
-            touch-action: manipulation; /* Mencegah zoom dengan double-tap */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        /* Container utama */
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-icon {
+            font-size: 36px;
+            color: white;
+        }
+        
+        .app-title {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .app-subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+            font-weight: 400;
+        }
+        
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Iframe Container */
+        .iframe-container {
+            width: 100%;
+            height: 70vh;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            position: relative;
         }
         
         iframe {
-            position: fixed;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Loading State */
+        .loading-state {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: none;
-            /* Untuk beberapa browser mobile */
-            -webkit-overflow-scrolling: touch;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border-radius: 12px;
         }
         
-        /* Indikator loading untuk mobile */
-        .loading {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 18px;
-            color: #333;
-            z-index: 999;
-            background: rgba(255,255,255,0.9);
-            padding: 20px;
-            border-radius: 10px;
+        /* Error State */
+        .error-state {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 20;
+            border-radius: 12px;
         }
         
-        /* Animasi loading */
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
+        .error-state.hidden {
+            display: none;
+        }
+        
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+        
+        .error-title {
+            color: #e74c3c;
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .error-message {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        /* Button Styles */
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-outline {
+            background: white;
+            color: #6a11cb;
+            border: 2px solid #6a11cb;
+        }
+        
+        /* Loading Animation */
+        .dot-loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .dot {
+            width: 14px;
+            height: 14px;
+            margin: 0 5px;
+            background-color: #6a11cb;
             border-radius: 50%;
-            border-top: 4px solid #007bff;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            animation: dot-pulse 1.5s infinite ease-in-out;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .dot:nth-child(1) {
+            animation-delay: -0.3s;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: -0.15s;
+        }
+        
+        @keyframes dot-pulse {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #95a5a6;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .iframe-container {
+                height: 60vh;
+            }
+            
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo-icon {
+                font-size: 28px;
+            }
+            
+            .app-title {
+                font-size: 20px;
+            }
+        }
+        
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Indikator loading -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        Memuat konten CBT...
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">👥</div>
+            </div>
+            <h1 class="app-title">Pendataan Kelompok Kelas</h1>
+            <p class="app-subtitle">Sistem Pengelolaan Data Kelompok Belajar</p>
+        </div>
+        
+        <div class="content-area">
+            <div class="iframe-container">
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="dot-loader">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <p id="loadingText">Menyiapkan sistem pendataan...</p>
+                </div>
+                
+                <!-- Error State -->
+                <div class="error-state hidden" id="errorState">
+                    <div class="error-icon">⚠️</div>
+                    <h2 class="error-title">Gagal Terhubung ke Server</h2>
+                    <p class="error-message" id="errorMessage">
+                        Sistem tidak dapat terhubung ke server pendataan. 
+                        Hal ini bisa disebabkan oleh:
+                    </p>
+                    <div style="text-align: left; margin-bottom: 20px; color: #7f8c8d;">
+                        <p>✓ App Script belum dideploy sebagai Web App</p>
+                        <p>✓ Izin akses belum dikonfigurasi</p>
+                        <p>✓ Koneksi internet terputus</p>
+                        <p>✓ URL App Script tidak valid</p>
+                    </div>
+                    <div>
+                        <button class="btn" onclick="retryConnection()">Coba Lagi</button>
+                        <button class="btn btn-outline" onclick="showAlternative()">Alternatif</button>
+                    </div>
+                </div>
+                
+                <!-- Iframe -->
+                <iframe 
+                    id="contentFrame"
+                    src=""
+                    allowfullscreen
+                    allow="autoplay; encrypted-media; picture-in-picture">
+                </iframe>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Sistem Pendataan Kelompok Kelas © 2024</p>
+        </div>
     </div>
     
-    <iframe 
-        id="contentFrame"
-        src="https://script.google.com/macros/s/AKfycbxdHHPc0MxVv0f4QXKN9PRdua0cKAYShAo9xoMw59THcamUWjcnkwTcgWwG_DRn2Pc9HA/exec"
-        allowfullscreen
-        allow="autoplay; encrypted-media; picture-in-picture"
-        loading="eager">
-    </iframe>
+    <!-- Alternative Form (Hidden by default) -->
+    <div id="alternativeForm" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1000; padding: 20px; overflow-y: auto;">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">Alternatif: Input Data Manual</h2>
+            <p style="color: #7f8c8d; margin-bottom: 30px;">Silakan isi data kelompok kelas secara manual:</p>
+            
+            <form id="manualForm" style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-weight: 500;">Nama Kelompok</label>
+                    <input type="text" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" required>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-weight: 500;">Ketua Kelompok</label>
+                    <input type="text" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" required>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-weight: 500;">Anggota (pisahkan dengan koma)</label>
+                    <textarea style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; min-height: 100px;" required></textarea>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-weight: 500;">Kelas</label>
+                    <input type="text" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" required>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn">Simpan Data</button>
+                    <button type="button" class="btn btn-outline" onclick="closeAlternative()">Kembali</button>
+                </div>
+            </form>
+            
+            <div style="margin-top: 30px; background: #e8f4fd; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db;">
+                <p style="color: #2c3e50; margin-bottom: 10px;"><strong>Untuk Admin:</strong></p>
+                <p style="color: #7f8c8d; font-size: 14px;">
+                    Untuk memperbaiki koneksi App Script, pastikan:
+                </p>
+                <ul style="color: #7f8c8d; font-size: 14px; padding-left: 20px;">
+                    <li>Script sudah dideploy sebagai <strong>Web App</strong></li>
+                    <li>Pengaturan "Execute as" diatur ke akun yang benar</li>
+                    <li>Pengaturan "Who has access" diatur ke <strong>Anyone</strong> atau <strong>Anyone with Google account</strong></li>
+                    <li>URL deployment sudah diperbarui di kode ini</li>
+                </ul>
+            </div>
+        </div>
+    </div>
     
     <script>
-        // Sembunyikan loading setelah iframe dimuat
-        document.getElementById('contentFrame').onload = function() {
-            document.getElementById('loading').style.display = 'none';
+        // URL Google Apps Script - GANTI DENGAN URL DEPLOYMENT ANDA
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdHHPc0MxVv0f4QXKN9PRdua0cKAYShAo9xoMw59THcamUWjcnkwTcgWwG_DRn2Pc9HA/exec";
+        
+        // DOM Elements
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const contentFrame = document.getElementById('contentFrame');
+        const loadingText = document.getElementById('loadingText');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // Status messages for loading
+        const statusMessages = [
+            "Menginisialisasi sistem...",
+            "Mencoba menghubungkan ke server...",
+            "Memverifikasi koneksi...",
+            "Memuat antarmuka pendataan..."
+        ];
+        
+        let currentStatus = 0;
+        
+        // Update loading text periodically
+        function updateLoadingText() {
+            loadingText.textContent = statusMessages[currentStatus];
+            currentStatus = (currentStatus + 1) % statusMessages.length;
+        }
+        
+        // Start loading animation
+        const loadingInterval = setInterval(updateLoadingText, 2000);
+        
+        // Initialize connection
+        function initializeConnection() {
+            console.log("Attempting to connect to:", APP_SCRIPT_URL);
+            
+            // Set iframe source
+            contentFrame.src = APP_SCRIPT_URL;
+            
+            // Set timeout for connection
+            const connectionTimeout = setTimeout(() => {
+                handleConnectionError("Timeout: Server tidak merespon");
+            }, 10000);
+            
+            // Iframe load success handler
+            contentFrame.onload = function() {
+                clearTimeout(connectionTimeout);
+                clearInterval(loadingInterval);
+                loadingState.style.display = 'none';
+                errorState.classList.add('hidden');
+                console.log("Connection successful");
+            };
+            
+            // Iframe error handler
+            contentFrame.onerror = function() {
+                clearTimeout(connectionTimeout);
+                clearInterval(loadingInterval);
+                handleConnectionError("Gagal memuat konten dari server");
+            };
+        }
+        
+        // Handle connection error
+        function handleConnectionError(message) {
+            loadingState.style.display = 'none';
+            errorState.classList.remove('hidden');
+            errorMessage.innerHTML = `Sistem tidak dapat terhubung ke server pendataan.<br>
+                                     <strong>Error:</strong> ${message}<br><br>
+                                     Pastikan App Script sudah dideploy dengan benar.`;
+            console.error("Connection error:", message);
+        }
+        
+        // Retry connection
+        function retryConnection() {
+            errorState.classList.add('hidden');
+            loadingState.style.display = 'flex';
+            currentStatus = 0;
+            updateLoadingText();
+            
+            // Clear previous interval and start new one
+            clearInterval(loadingInterval);
+            setInterval(updateLoadingText, 2000);
+            
+            // Retry connection after a short delay
+            setTimeout(initializeConnection, 1000);
+        }
+        
+        // Show alternative form
+        function showAlternative() {
+            document.getElementById('alternativeForm').classList.remove('hidden');
+        }
+        
+        // Close alternative form
+        function closeAlternative() {
+            document.getElementById('alternativeForm').classList.add('hidden');
+        }
+        
+        // Handle manual form submission
+        document.getElementById('manualForm').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Data berhasil disimpan secara lokal. Untuk integrasi dengan Google Sheets, pastikan App Script sudah terkonfigurasi dengan benar.');
+            closeAlternative();
         };
         
-        // Fallback: sembunyikan loading setelah 5 detik
-        setTimeout(function() {
-            document.getElementById('loading').style.display = 'none';
-        }, 5000);
-        
-        // Fungsi untuk layar penuh masih tersedia jika diperlukan
-        function toggleFullscreen() {
-            const iframe = document.getElementById('contentFrame');
-            
-            // Periksa apakah sudah di layar penuh
-            if (document.fullscreenElement || 
-                document.webkitFullscreenElement ||  // Safari
-                document.mozFullScreenElement ||     // Firefox
-                document.msFullscreenElement) {      // IE/Edge
-                
-                // Keluar dari layar penuh
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            } else {
-                // Masuk ke layar penuh
-                const element = iframe;
-                
-                if (element.requestFullscreen) {
-                    element.requestFullscreen();
-                } else if (element.webkitRequestFullscreen) {
-                    element.webkitRequestFullscreen();
-                } else if (element.mozRequestFullScreen) {
-                    element.mozRequestFullScreen();
-                } else if (element.msRequestFullscreen) {
-                    element.msRequestFullscreen();
-                }
-            }
-        }
-        
-        // Mencegah perilaku default di mobile
-        document.addEventListener('touchmove', function(e) {
-            if (e.scale !== 1) {
-                e.preventDefault(); // Mencegah zoom
-            }
-        }, { passive: false });
-        
-        // Deteksi perangkat mobile
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-        
-        // Penyesuaian untuk mobile
-        if (isMobile()) {
-            // Tambahkan kelas mobile ke body
-            document.body.classList.add('mobile-device');
-            
-            // Pesan untuk orientasi landscape (opsional)
-            window.addEventListener("orientationchange", function() {
-                if (window.orientation === 90 || window.orientation === -90) {
-                    console.log("Mode landscape - cocok untuk tampilan CBT");
-                } else {
-                    console.log("Mode portrait");
-                }
+        // Test connection before loading
+        function testConnection() {
+            fetch(APP_SCRIPT_URL, { 
+                method: 'HEAD',
+                mode: 'no-cors',
+                cache: 'no-cache'
+            }).then(() => {
+                console.log("URL is accessible");
+            }).catch((error) => {
+                console.warn("URL might not be accessible:", error);
+                // Still try to load, but show warning
+                setTimeout(() => {
+                    handleConnectionError("Server tidak dapat diakses. Periksa URL deployment.");
+                }, 3000);
             });
-            
-            // Tambahkan event untuk masuk ke layar penuh secara otomatis di mobile
-            // Hapus komentar di bawah jika ingin layar penuh otomatis
-            // setTimeout(toggleFullscreen, 1000);
         }
         
-        // Tambahkan keyboard shortcut F11 untuk layar penuh (opsional)
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start with loading state
+            updateLoadingText();
+            
+            // Test connection
+            testConnection();
+            
+            // Initialize connection
+            setTimeout(initializeConnection, 1000);
+        });
+        
+        // Add keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'F11') {
+            // F5 to refresh
+            if (e.key === 'F5') {
                 e.preventDefault();
-                toggleFullscreen();
+                retryConnection();
+            }
+            
+            // Escape to close alternative form
+            if (e.key === 'Escape') {
+                closeAlternative();
             }
         });
     </script>
